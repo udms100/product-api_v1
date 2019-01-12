@@ -3,14 +3,13 @@ import { Router } from 'express';
 import Compare from '../models/compare';
 import Review from '../models/review';
 import bodyParser from 'body-parser';
-
-//import { authenticate } from "../middleware/authMiddleware";
+import { authenticate } from "../middleware/authMiddleware";
 
 export default({ config, db }) => {
   let api = Router();
 
   
-  api.get('/', (req, res) => {
+  api.get('/', authenticate, (req, res) => {
     Compare.find({}, (err, compare) => {
       if (err) {
         res.send(err);
@@ -29,17 +28,23 @@ export default({ config, db }) => {
     });
   });
 
-  api.post('/add',  (req, res) => {
+  api.post('/add', authenticate,  (req, res) => {
     let newCompare = new Compare();
     newCompare.pharmacy_name = req.body.pharmacy_name;
     newCompare.brand = req.body.brand;
-    newCompare.discount_price = req.body.discount_price;
+    newCompare.price = [
+      {
+        discount_price: req.body.discount_price,
+        estimated_price: req.body.estimated_price
+      }
+    ]
+    // newCompare.discount_price = req.body.discount_price;
     newCompare.generic = req.body.generic;
     newCompare.form = req.body.form;
     newCompare.dosage = req.body.dosage;
     newCompare.quantity = req.body.quantity;
     newCompare.manufacturer = req.body.manufacturer;
-    newCompare.estimated_price = req.body.estimated_price;
+    // newCompare.estimated_price = req.body.estimated_price;
     // newCompare.geometry.coordinates = req.body.geometry.coordinates;
     newCompare.save(function(err) {
       if (err) {
@@ -75,13 +80,19 @@ export default({ config, db }) => {
       }
     compare.pharmacy_name = req.body.pharmacy_name
     compare.brand = req.body.brand;
-    compare.discount_price = req.body.discount_price;
+    newCompare.price = [
+      {
+        discount_price: req.body.discount_price,
+        estimated_price: req.body.estimated_price
+      }
+    ]
+    // compare.discount_price = req.body.discount_price;
     compare.generic = req.body.generic;
     compare.form = req.body.form;
     compare.dosage = req.body.dosage;
     compare.quantity = req.body.quantity;
     compare.manufacturer = req.body.manufacturer;
-    compare.estimated_price = req.body.estimated_price;
+    // compare.estimated_price = req.body.estimated_price;
       compare.save(function(err) {
         if (err) {
           res.send(err);

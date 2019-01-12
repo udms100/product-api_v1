@@ -11,10 +11,22 @@ let compareSchema = new Schema({
         type: String,
         required: true
     },
-    discount_price: {
-        type: Number,
-        required: true
-    },
+    price : [
+        {
+            discount_price: {
+                type: Number,
+             
+                required: true
+            },
+            estimated_price: {
+                type: Number,
+                required: true
+            },
+
+
+        }
+    ],
+    
     generic: {
         type: String,
         required: true
@@ -34,13 +46,10 @@ let compareSchema = new Schema({
     manufacturer: {
         type: String,
     },
-    estimated_price: {
-        type: Number,
-        required: true
-    },
+    
     geometry:{
       type: {type: String, default: 'point'},
-      coordinates: [Number]
+      coordinates: [String]
     },
     reviews: [{type: Schema.Types.ObjectId, ref: 'Review'}]
 });
